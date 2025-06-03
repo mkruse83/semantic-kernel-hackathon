@@ -44,8 +44,8 @@ async def echo(userInput: str, con: CustomConnection) -> str:
     # Add Azure OpenAI chat completion
     chat_completion = AzureChatCompletion(
         deployment_name="gpt-4.1",
-        api_key=con.API_KEY,
-        endpoint=con.ENDPOINT,
+        api_key=con.OPENAI_41_KEY,
+        endpoint=con.OPENAI_41__ENDPOINT,
     )
     kernel.add_service(chat_completion)
 
@@ -94,8 +94,8 @@ async def execute_tool(user_message: str) -> str:
     # Create a CustomConnection instance with the environment variables
     con = CustomConnection(
         secrets={
-            "API_KEY": os.getenv("AZURE_OPENAI_API_KEY"),
-            "ENDPOINT": os.getenv("AZURE_OPENAI_ENDPOINT"),
+            "OPENAI_41_KEY": os.getenv("OPENAI_41_KEY"),
+            "OPENAI_41__ENDPOINT": os.getenv("OPENAI_41__ENDPOINT"),
         }
     )
     return await echo(user_message, con)

@@ -18,3 +18,4 @@ nodes:
       path: echo.py
     inputs:
       userInput: ${inputs.topic}
+      con: siemenshackathon
