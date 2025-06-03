@@ -1,9 +1,9 @@
 import asyncio
+import os
 from promptflow.core import tool
+from dotenv import load_dotenv
 
 from semantic_kernel import Kernel
-from semantic_kernel.utils.logging import setup_logging
-from semantic_kernel.functions import kernel_function
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 from semantic_kernel.connectors.ai.function_choice_behavior import (
     FunctionChoiceBehavior,
@@ -16,6 +16,8 @@ from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.azure_chat_
 )
 
 from lights import LightsPlugin
+from promptflow.connections import CustomConnection
+
 
 # The inputs section will change based on the arguments of the tool function, after you save the code
 # Adding type to arguments and return value will help the system show the types properly
@@ -35,15 +37,15 @@ logging.getLogger("kernel").setLevel(logging.DEBUG)
 
 
 @tool
-async def echo(userInput: str) -> str:
+async def echo(userInput: str, con: CustomConnection) -> str:
     # Initialize the kernel6
     kernel = Kernel()
 
     # Add Azure OpenAI chat completion
     chat_completion = AzureChatCompletion(
         deployment_name="gpt-4.1",
-        api_key="",
-        endpoint="",
+        api_key=con.API_KEY,
+        endpoint=con.ENDPOINT,
     )
     kernel.add_service(chat_completion)
 
@@ -88,4 +90,12 @@ async def execute_tool(user_message: str) -> str:
     This function is the entry point for the tool.
     It calls the echo function with the provided input.
     """
-    return await echo(user_message)
+    load_dotenv()
+    # Create a CustomConnection instance with the environment variables
+    con = CustomConnection(
+        secrets={
+            "API_KEY": os.getenv("AZURE_OPENAI_API_KEY"),
+            "ENDPOINT": os.getenv("AZURE_OPENAI_ENDPOINT"),
+        }
+    )
+    return await echo(user_message, con)
