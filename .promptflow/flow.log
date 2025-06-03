@@ -1,0 +1,5 @@
+2025-06-03 14:07:21 +0200   45968 execution.flow     INFO     Start executing nodes in async mode.
+2025-06-03 14:07:21 +0200   45968 execution.flow     INFO     Start to run 1 nodes with the current event loop.
+2025-06-03 14:07:21 +0200   45968 execution.flow     INFO     Executing node echo. node run id: fc8b6e23-1652-4b19-b151-78f35dd7446c_echo_0
+2025-06-03 14:07:24 +0200   45968 execution.flow     INFO     [echo in line 0 (index starts from 0)] stdout> Assistant > The square root of 2 × 8 (which is 16) is 4.
+2025-06-03 14:07:24 +0200   45968 execution.flow     INFO     Node echo completes.

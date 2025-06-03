@@ -1,0 +1,20 @@
+id: template_standard_flow
+name: Template Standard Flow
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  topic:
+    type: string
+    default: What is the square root of 2*8?
+outputs:
+  result:
+    type: string
+    reference: ${echo.output}
+nodes:
+  - name: echo
+    type: python
+    source:
+      type: code
+      path: echo.py
+    inputs:
+      userInput: ${inputs.topic}

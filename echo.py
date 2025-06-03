@@ -1,0 +1,91 @@
+import asyncio
+from promptflow.core import tool
+
+from semantic_kernel import Kernel
+from semantic_kernel.utils.logging import setup_logging
+from semantic_kernel.functions import kernel_function
+from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
+from semantic_kernel.connectors.ai.function_choice_behavior import (
+    FunctionChoiceBehavior,
+)
+from semantic_kernel.contents import ChatHistory
+from math_plugin import MathPlugin
+
+from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.azure_chat_prompt_execution_settings import (
+    AzureChatPromptExecutionSettings,
+)
+
+from lights import LightsPlugin
+
+# The inputs section will change based on the arguments of the tool function, after you save the code
+# Adding type to arguments and return value will help the system show the types properly
+# Please update the function name/signature per need
+
+# In Python tool you can do things like calling external services or
+# pre/post processing of data, pretty much anything you want
+
+import logging
+
+# Set the logging level for  semantic_kernel.kernel to DEBUG.
+logging.basicConfig(
+    format="[%(asctime)s - %(name)s:%(lineno)d - %(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logging.getLogger("kernel").setLevel(logging.DEBUG)
+
+
+@tool
+async def echo(userInput: str) -> str:
+    # Initialize the kernel6
+    kernel = Kernel()
+
+    # Add Azure OpenAI chat completion
+    chat_completion = AzureChatCompletion(
+        deployment_name="gpt-4.1",
+        api_key="",
+        endpoint="",
+    )
+    kernel.add_service(chat_completion)
+
+    # Add a plugin (the LightsPlugin class is defined below)
+    kernel.add_plugin(
+        LightsPlugin(),
+        plugin_name="Lights",
+    )
+    kernel.add_plugin(MathPlugin(), plugin_name="MathPlugin")
+
+    # Enable planning
+    execution_settings = AzureChatPromptExecutionSettings()
+    execution_settings.function_choice_behavior = FunctionChoiceBehavior.Auto()
+
+    # Create a history of the conversation
+    history = ChatHistory()
+    history.add_system_message(
+        "You are a helpful assistant. You can answer questions and execute tools."
+    )
+
+    # Initiate a back-and-forth chat
+    # Add user input to the history
+    history.add_user_message(userInput)
+
+    # Get the response from the AI
+    result = await chat_completion.get_chat_message_content(
+        chat_history=history,
+        settings=execution_settings,
+        kernel=kernel,
+    )
+
+    # Print the results
+    print("Assistant > " + str(result))
+
+    # Add the message from the agent to the chat history
+    history.add_message(result)
+    return str(result)
+
+
+async def execute_tool(user_message: str) -> str:
+    """
+    This function is the entry point for the tool.
+    It calls the echo function with the provided input.
+    """
+    return await echo(user_message)
