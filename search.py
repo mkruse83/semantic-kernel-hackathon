@@ -42,7 +42,7 @@ class SearchPlugin:
         ],
     ) -> Annotated[float, "The output is a float"]:
         # use Azure AI Search to search for service offerings
-        logger.debug(f"Searching for query: {query}")
+        logger.info(f"Searching for query: {query}")
         results = self.client.search(
             search_text=query,
             top=5,
