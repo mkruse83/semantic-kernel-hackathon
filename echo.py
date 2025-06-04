@@ -17,6 +17,7 @@ from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.azure_chat_
 
 from lights import LightsPlugin
 from promptflow.connections import CustomConnection
+from search import SearchPlugin
 
 
 # The inputs section will change based on the arguments of the tool function, after you save the code
@@ -34,27 +35,31 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 logging.getLogger("kernel").setLevel(logging.DEBUG)
+logging.getLogger("echo").setLevel(logging.DEBUG)
+logging.getLogger("search").setLevel(logging.INFO)
 
 
 @tool
 async def echo(userInput: str, con: CustomConnection) -> str:
+    print("####### " + __name__)
     # Initialize the kernel6
     kernel = Kernel()
 
     # Add Azure OpenAI chat completion
     chat_completion = AzureChatCompletion(
         deployment_name="gpt-4.1",
-        api_key=con.OPENAI_41_KEY,
-        endpoint=con.OPENAI_41__ENDPOINT,
+        api_key=con.secrets["OPENAI_41_KEY"],
+        endpoint=con.secrets["OPENAI_41__ENDPOINT"],
     )
     kernel.add_service(chat_completion)
 
     # Add a plugin (the LightsPlugin class is defined below)
-    kernel.add_plugin(
-        LightsPlugin(),
-        plugin_name="Lights",
-    )
-    kernel.add_plugin(MathPlugin(), plugin_name="MathPlugin")
+    # kernel.add_plugin(
+    #     LightsPlugin(),
+    #     plugin_name="Lights",
+    # )
+    # kernel.add_plugin(MathPlugin(), plugin_name="MathPlugin")
+    kernel.add_plugin(SearchPlugin(con), plugin_name="SearchPlugin")
 
     # Enable planning
     execution_settings = AzureChatPromptExecutionSettings()
@@ -96,6 +101,11 @@ async def execute_tool(user_message: str) -> str:
         secrets={
             "OPENAI_41_KEY": os.getenv("OPENAI_41_KEY"),
             "OPENAI_41__ENDPOINT": os.getenv("OPENAI_41__ENDPOINT"),
+            "AZURE_SEARCH_ENDPOINT": os.getenv("AZURE_SEARCH_ENDPOINT"),
+            "AZURE_SEARCH_API_KEY": os.getenv("AZURE_SEARCH_API_KEY"),
+            "AZURE_SEARCH_INDEX_NAME": os.getenv(
+                "AZURE_SEARCH_INDEX_NAME", "service-offerings"
+            ),
         }
     )
     return await echo(user_message, con)

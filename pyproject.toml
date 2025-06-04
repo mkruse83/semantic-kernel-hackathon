@@ -9,4 +9,5 @@ dependencies = [
     "promptflow>=1.18.0",
     "python-dotenv>=1.1.0",
     "semantic-kernel>=1.32.1",
+    "azure-search-documents>=11.5.2",
 ]

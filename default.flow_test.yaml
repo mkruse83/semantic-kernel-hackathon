@@ -1,0 +1,7 @@
+tests:
+  - name: ._default_20250604_101404_745000
+    display_name: ._${variant_id}_${timestamp}
+    flow: /Users/mkruse/siemens/git/semantic-agent
+    data: /Users/mkruse/siemens/git/semantic-agent/data.csv
+    column_mapping:
+      topic: QUESTION

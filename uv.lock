@@ -445,6 +445,21 @@ wheels = [
 ]
 
 [[package]]
+name = "azure-search-documents"
+version = "11.5.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-common" },
+    { name = "azure-core" },
+    { name = "isodate" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/96/7d/b45fff4a8e78ea4ad4d779c81dad34eef5300dd5c05b7dffdb85b8cb3d4f/azure_search_documents-11.5.2.tar.gz", hash = "sha256:98977dd1fa4978d3b7d8891a0856b3becb6f02cc07ff2e1ea40b9c7254ada315", size = 300346 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/1b/2cbc9de289ec025bac468d0e7140e469a215ea3371cd043486f9fda70f7d/azure_search_documents-11.5.2-py3-none-any.whl", hash = "sha256:c949d011008a4b0bcee3db91132741b4e4d50ddb3f7e2f48944d949d4b413b11", size = 298764 },
+]
+
+[[package]]
 name = "azure-storage-blob"
 version = "12.25.1"
 source = { registry = "https://pypi.org/simple" }
@@ -3046,6 +3061,7 @@ name = "semantic-agent"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "azure-search-documents" },
     { name = "promptflow" },
     { name = "promptflow-azure" },
     { name = "python-dotenv" },
@@ -3054,6 +3070,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "azure-search-documents", specifier = ">=11.5.2" },
     { name = "promptflow", specifier = ">=1.18.0" },
     { name = "promptflow-azure", specifier = ">=1.18.0" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
