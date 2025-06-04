@@ -13,10 +13,7 @@ def main():
     user_message = "What service offerings are available for the topic 'AI'?"
 
     # Execute the tool function
-    result = asyncio.run(execute_tool(user_message=user_message))
-
-    # Print the result
-    print("Tool Output:", result)
+    asyncio.run(execute_tool(user_message=user_message))
 
 
 if __name__ == "__main__":

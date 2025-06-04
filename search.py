@@ -1,10 +1,8 @@
 # Copyright (c) Microsoft. All rights reserved.
 # <defineClass>
-import math
 from typing import Annotated
 
 from semantic_kernel.functions.kernel_function_decorator import kernel_function
-import os
 from azure.search.documents import SearchClient
 from azure.core.credentials import AzureKeyCredential
 from promptflow.connections import CustomConnection
@@ -39,7 +37,8 @@ class SearchPlugin:
     def search(
         self,
         query: Annotated[
-            str, "A natural language query to search for service offerings."
+            str,
+            "A natural language query to search for service offerings. It should be a short description of the service offerings you are looking for.",
         ],
     ) -> Annotated[float, "The output is a float"]:
         # use Azure AI Search to search for service offerings
